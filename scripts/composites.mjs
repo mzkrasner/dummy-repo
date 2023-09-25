@@ -21,7 +21,8 @@ export const writeComposite = async (spinner) => {
  * @return {Promise<void>} - return void when DID is authenticated.
  */
 const authenticate = async () => {
-  const seed = process.env.SEED
+  // const seed = process.env.SEED
+  const seed = 'dfabafa4168279e29d326b5f3eecc64c0faddc69ff089f2381f81249e5369992'
   const key = fromString(
     seed,
     "base16"

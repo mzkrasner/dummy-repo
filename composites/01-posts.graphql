@@ -2,15 +2,15 @@ type BasicProfile @loadModel(id: "$PROFILE_ID") {
     id: ID!
 }
 
-type Posts @createModel(accountRelation: LIST, description: "A simple Post") {
-    body: String! @string(maxLength: 100000)
-    to: String! @string(minLength: 42, maxLength: 42)
+type Posts
+    @createModel(accountRelation: LIST, description: "A simple Post")
+    @createIndex(fields: [{ path: "created" }])
+    @createIndex(fields: [{ path: "edited" }])
+    @createIndex(fields: [{ path: "tag" }]) {
+    body: String! @string(minLength: 1, maxLength: 100)
+    tag: String! @string(minLength: 1, maxLength: 100)
     edited: DateTime
     created: DateTime!
-    profileId: StreamID! @documentReference(model:"BasicProfile")
+    profileId: StreamID! @documentReference(model: "BasicProfile")
     profile: BasicProfile! @relationDocument(property: "profileId")
-    symKey: String @string(maxLength: 100000)
-    chain: String @string(maxLength: 100000)
-    accessControlConditions: String @string(maxLength: 100000)
-    accessControlConditionType: String @string(maxLength: 100000)
 }

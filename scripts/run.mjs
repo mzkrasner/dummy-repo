@@ -27,8 +27,18 @@ const next = async () => {
   });
 };
 
+const graphiql = async () => {
+  spinner.info("[GraphiQL] starting graphiql");
+  const graphiql = spawn('node', ['./scripts/graphiql.mjs'])
+  spinner.succeed("[GraphiQL] graphiql started");
+  graphiql.stdout.on('data', (buffer) => {
+    console.log('[GraphiqQL]',buffer.toString())
+  })
+}
+
 const start = async () => {
   await bootstrap();
+  await graphiql()
   await next();
 };
 

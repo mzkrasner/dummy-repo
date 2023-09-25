@@ -44,10 +44,31 @@ const Home: NextPage = () => {
           }
         }
       `);
-      console.log(profile)
       setProfile(profile?.data?.viewer?.basicProfile);
       setLoading(false);
     }
+  };
+
+  const createFollow = async () => {
+    setLoading(true);
+        const follow = await composeClient.executeQuery(`
+        mutation {
+          createFollowing(input: {
+            content: {
+              profileId: "k2t6wzhkhabz3n39d9xcnv3zccve4wsk16w4j0psxb8uelqqopt0ky424evzoq"
+            }
+          }) 
+          {
+            document {
+              profileId
+            }
+          }
+        }
+      `);
+        console.log(follow);
+      
+      setLoading(false);
+    
   };
 
   const updateProfile = async () => {
@@ -253,7 +274,7 @@ const Home: NextPage = () => {
           <div style={{ display: "flex", justifyContent: "center" }}>
             <button
               onClick={() => {
-                updateProfile();
+                createFollow();
               }}
               style={{
                 width: "8rem",
@@ -263,7 +284,7 @@ const Home: NextPage = () => {
                 borderColor: "orange",
               }}
             >
-              {loading ? "Loading..." : "Update Profile"}
+              {loading ? "Loading..." : "Create Follow"}
             </button>
           </div>
         </div>

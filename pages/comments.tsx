@@ -44,23 +44,162 @@ const Home: NextPage = () => {
           }
         }
       `);
-      console.log(profile)
       setProfile(profile?.data?.viewer?.basicProfile);
       setLoading(false);
     }
   };
 
+  const taylorGarciaPosts = {
+    0: {
+      profileId:
+        "k2t6wzhkhabz10s2wk66g46zu0o21yp70jrikvbx9q7qo9f5p8ohzzim90y4ku",
+      body: "Open source: tech's future? Let's chat!",
+      tag: "OpenSource",
+      created: "2022-04-10T08:30:00Z",
+    },
+    1: {
+      profileId:
+        "k2t6wzhkhabz10s2wk66g46zu0o21yp70jrikvbx9q7qo9f5p8ohzzim90y4ku",
+      body: "Funding open source? Thoughts? 💭💸",
+      tag: "Funding",
+      created: "2022-06-18T12:15:00Z",
+    },
+    2: {
+      profileId:
+        "k2t6wzhkhabz10s2wk66g46zu0o21yp70jrikvbx9q7qo9f5p8ohzzim90y4ku",
+      body: "Supporting open source heroes? 💻💪",
+      tag: "OpenSource",
+      created: "2022-09-02T17:45:00Z",
+    },
+    3: {
+      profileId:
+        "k2t6wzhkhabz10s2wk66g46zu0o21yp70jrikvbx9q7qo9f5p8ohzzim90y4ku",
+      body: "Open source's budget impact? 🌍🚀",
+      tag: "Funding",
+      created: "2023-01-25T09:10:00Z",
+    },
+    4: {
+      profileId:
+        "k2t6wzhkhabz10s2wk66g46zu0o21yp70jrikvbx9q7qo9f5p8ohzzim90y4ku",
+      body: "Contributions with rewards? 🍰💡",
+      tag: "OpenSource",
+      created: "2023-04-05T14:30:00Z",
+    },
+    5: {
+      profileId:
+        "k2t6wzhkhabz10s2wk66g46zu0o21yp70jrikvbx9q7qo9f5p8ohzzim90y4ku",
+      body: "Accessible tech piggy bank? 🐷🏦",
+      tag: "Funding",
+      created: "2023-07-18T19:05:00Z",
+    },
+    6: {
+      profileId:
+        "k2t6wzhkhabz10s2wk66g46zu0o21yp70jrikvbx9q7qo9f5p8ohzzim90y4ku",
+      body: "More devs in open source? 🚀🗺️",
+      tag: "OpenSource",
+      created: "2023-09-30T10:20:00Z",
+    },
+    7: {
+      profileId:
+        "k2t6wzhkhabz10s2wk66g46zu0o21yp70jrikvbx9q7qo9f5p8ohzzim90y4ku",
+      body: "Sustainable support: reality? 🌱",
+      tag: "Funding",
+      created: "2023-12-12T15:40:00Z",
+    },
+  };
+
+//   const getPosts = async () => {
+//     setLoading(true);
+//     // console.log(alexThompsonPosts[1].body)
+//     const posts = await composeClient.executeQuery(`
+//         query{
+//             postsIndex(first: 100){
+//                 edges{
+//                     node{
+//                         id
+//                         body
+//                         created
+//                     }
+//                 }
+//             }
+//         }
+//       `);
+//     console.log(posts.data.postsIndex.edges);
+//     const requestOptions = {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(posts.data.postsIndex.edges),
+//     };
+
+//     const returnItems = await fetch("/api/route", requestOptions).then(
+//       (response) => response.json()
+//     );
+//     console.log(returnItems)
+
+//     for(let i = 0; i < 39; i++){
+//         await new Promise((resolve) => setTimeout(resolve, 100));
+//         const comment = await composeClient.executeQuery(`
+//         mutation {
+//           createComments(input: {
+//             content: {
+//               profileId: "k2t6wzhkhabz10s2wk66g46zu0o21yp70jrikvbx9q7qo9f5p8ohzzim90y4ku"
+//               comment: "${returnItems[i].response}"
+//               postId: "${returnItems[i].id}"
+//               created: "${returnItems[i].date}"
+//             }
+//           }) 
+//           {
+//             document {
+//               profileId
+//               id
+//               comment
+//               created
+//             }
+//           }
+//         }
+//       `);
+//         console.log(comment);
+//     }
+
+//     setLoading(false);
+//   };
+
+const getPosts = async () => {
+    setLoading(true);
+   console.log('hello')
+    const posts = await composeClient.executeQuery(`
+    query{
+        postsIndex(last: 10){
+          edges{
+            node{
+              body
+              responses(first: 5){
+                edges{
+                    node{
+                        id
+                        comment
+                    }
+                }
+              }
+            }
+          }
+        }
+      }
+      `);
+    console.log(posts)
+
+    setLoading(false);
+  };
   const updateProfile = async () => {
     setLoading(true);
-    if(profile){
-      if(profile.username){
-        if(profile.username.length < 5){
-          alert('Username must be greater than 5 characters');
+    if (profile) {
+      if (profile.username) {
+        if (profile.username.length < 5) {
+          alert("Username must be greater than 5 characters");
           setLoading(false);
           return;
         }
       }
-      
     }
     if (ceramic.did !== undefined) {
       const update = await composeClient.executeQuery(`
@@ -85,7 +224,7 @@ const Home: NextPage = () => {
           }
         }
       `);
-      console.log(update)
+      console.log(update);
       if (update.errors) {
         setLoading(false);
         alert(update.errors);
@@ -138,7 +277,7 @@ const Home: NextPage = () => {
   return (
     <div className={styles.homeContainer}>
       {profile === undefined && ceramic.did === undefined ? (
-        <div  style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <button
             onClick={() => {
               handleLogin();
@@ -253,7 +392,7 @@ const Home: NextPage = () => {
           <div style={{ display: "flex", justifyContent: "center" }}>
             <button
               onClick={() => {
-                updateProfile();
+                getPosts();
               }}
               style={{
                 width: "8rem",
@@ -263,7 +402,7 @@ const Home: NextPage = () => {
                 borderColor: "orange",
               }}
             >
-              {loading ? "Loading..." : "Update Profile"}
+              {loading ? "Loading..." : "Create Comments"}
             </button>
           </div>
         </div>
@@ -272,3 +411,4 @@ const Home: NextPage = () => {
   );
 };
 export default Home;
+// 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

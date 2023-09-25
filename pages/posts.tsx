@@ -44,10 +44,93 @@ const Home: NextPage = () => {
           }
         }
       `);
-      console.log(profile)
       setProfile(profile?.data?.viewer?.basicProfile);
       setLoading(false);
     }
+  };
+
+  const newPosts = {
+    8: {
+        profileId: "k2t6wzhkhabz190qvb93kwykhd6t8yk3b8pj6qeunq4bv1qvo7mhg507ct87l5",
+        body: "AI will reshape our lives! 🤖🌐",
+        tag: "AI",
+        created: "2020-06-18T13:20:00Z"
+    },
+    9: {
+        profileId: "k2t6wzhkhabz190qvb93kwykhd6t8yk3b8pj6qeunq4bv1qvo7mhg507ct87l5",
+        body: "Renewable energy is the future! ☀️🌿",
+        tag: "RenewableEnergy",
+        created: "2021-04-09T16:45:00Z"
+    },
+    10: {
+        profileId: "k2t6wzhkhabz190qvb93kwykhd6t8yk3b8pj6qeunq4bv1qvo7mhg507ct87l5",
+        body: "Space exploration is essential! 🚀🌌",
+        tag: "Space",
+        created: "2019-08-15T11:30:00Z"
+    },
+    11: {
+        profileId: "k2t6wzhkhabz190qvb93kwykhd6t8yk3b8pj6qeunq4bv1qvo7mhg507ct87l5",
+        body: "AI ethics are complex but vital! 🤖🤔",
+        tag: "AI",
+        created: "2021-11-05T14:15:00Z"
+    },
+    12: {
+        profileId: "k2t6wzhkhabz190qvb93kwykhd6t8yk3b8pj6qeunq4bv1qvo7mhg507ct87l5",
+        body: "Clean water tech excites me! 💧🌍",
+        tag: "Technology",
+        created: "2020-07-20T09:50:00Z"
+    },
+    13: {
+        profileId: "k2t6wzhkhabz190qvb93kwykhd6t8yk3b8pj6qeunq4bv1qvo7mhg507ct87l5",
+        body: "Automation reshapes jobs! 🤖💼",
+        tag: "Automation",
+        created: "2019-03-28T12:40:00Z"
+    },
+    14: {
+        profileId: "k2t6wzhkhabz190qvb93kwykhd6t8yk3b8pj6qeunq4bv1qvo7mhg507ct87l5",
+        body: "I champion green architecture! 🏡🌿",
+        tag: "Sustainability",
+        created: "2018-09-17T15:25:00Z"
+    },
+    15: {
+        profileId: "k2t6wzhkhabz190qvb93kwykhd6t8yk3b8pj6qeunq4bv1qvo7mhg507ct87l5",
+        body: "Quantum computing fuels innovation! 🧮🌐",
+        tag: "Technology",
+        created: "2023-03-21T14:55:00Z"
+    }
+};
+
+  const createPost = async () => {
+    setLoading(true);
+    // console.log(alexThompsonPosts[1].body)
+    for(let i = 8; i < 16; i++){
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        const follow = await composeClient.executeQuery(`
+        mutation {
+          createPosts(input: {
+            content: {
+              profileId: "${newPosts[i].profileId}"
+              body: "${newPosts[i].body}"
+              tag: "${newPosts[i].tag}"
+              created: "${newPosts[i].created}"
+            }
+          }) 
+          {
+            document {
+              profileId
+              author{
+                id
+              }
+            }
+          }
+        }
+      `);
+        console.log(follow);
+    }
+        
+      
+      setLoading(false);
+    
   };
 
   const updateProfile = async () => {
@@ -253,7 +336,7 @@ const Home: NextPage = () => {
           <div style={{ display: "flex", justifyContent: "center" }}>
             <button
               onClick={() => {
-                updateProfile();
+                createPost();
               }}
               style={{
                 width: "8rem",
@@ -263,7 +346,7 @@ const Home: NextPage = () => {
                 borderColor: "orange",
               }}
             >
-              {loading ? "Loading..." : "Update Profile"}
+              {loading ? "Loading..." : "Create Post"}
             </button>
           </div>
         </div>
